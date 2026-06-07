@@ -32,6 +32,9 @@ class RealtimeInventory(Base):
     warehouse_code = Column(String(20), nullable=False)
     sku = Column(String(50), nullable=False)
     quantity = Column(Float, default=0.0)
+    total_quantity = Column(Float, default=0.0)
+    allocated_quantity = Column(Float, default=0.0)
+    available_quantity = Column(Float, default=0.0)
     snapshot_time = Column(DateTime, default=datetime.now)
 
 
@@ -41,6 +44,9 @@ class ERPInventory(Base):
     warehouse_code = Column(String(20), nullable=False)
     sku = Column(String(50), nullable=False)
     quantity = Column(Float, default=0.0)
+    total_quantity = Column(Float, default=0.0)
+    allocated_quantity = Column(Float, default=0.0)
+    available_quantity = Column(Float, default=0.0)
     snapshot_time = Column(DateTime, default=datetime.now)
 
 

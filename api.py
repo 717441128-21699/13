@@ -15,7 +15,15 @@ from config import REPORT_DIR, EXPORT_DIR
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
-init_db()
+
+def _safe_init():
+    import os
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'inventory.db')
+    if not os.path.exists(db_path):
+        init_db()
+
+
+_safe_init()
 
 
 def _to_dict(obj, fields):
@@ -238,8 +246,15 @@ def api_review_order(order_no):
 @app.route('/api/orders/<order_no>/upgrade', methods=['POST'])
 def api_upgrade_order(order_no):
     from work_order_manager import check_and_upgrade_orders
-    check_and_upgrade_orders()
-    return jsonify({'success': True})
+    upgraded = check_and_upgrade_orders()
+    return jsonify({'success': True, 'upgraded_count': len(upgraded)})
+
+
+@app.route('/api/orders/upgrade-all', methods=['POST'])
+def api_upgrade_all_orders():
+    from work_order_manager import check_and_upgrade_orders
+    upgraded = check_and_upgrade_orders()
+    return jsonify({'success': True, 'upgraded_count': len(upgraded)})
 
 
 @app.route('/api/daily/run', methods=['POST'])

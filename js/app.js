@@ -17,6 +17,25 @@ async function api(path, options = {}) {
     }
 }
 
+function safeChart(domId) {
+    if (typeof echarts === 'undefined') {
+        console.warn('[ECharts] 未加载，跳过图表渲染:', domId);
+        return null;
+    }
+    const el = document.getElementById(domId);
+    if (!el) {
+        console.warn('[ECharts] DOM元素不存在:', domId);
+        return null;
+    }
+    return echarts.init(el);
+}
+
+function renderChart(domId, option) {
+    const c = safeChart(domId);
+    if (c && option) c.setOption(option);
+    return c;
+}
+
 function showToast(msg, type = '') {
     const t = document.getElementById('toast');
     t.className = 'toast show ' + type;
@@ -194,8 +213,8 @@ async function renderDashboard() {
     `;
     document.getElementById('content').innerHTML = html;
 
-    charts.diff_type = echarts.init(document.getElementById('chart_diff_type'));
-    charts.diff_type.setOption({
+    charts.diff_type = safeChart('chart_diff_type');
+    charts.diff_type && charts.diff_type.setOption({
         tooltip: { trigger: 'item' },
         legend: { bottom: 0 },
         series: [{
@@ -213,8 +232,8 @@ async function renderDashboard() {
     });
 
     const whNames = Object.keys(d.by_warehouse);
-    charts.wh = echarts.init(document.getElementById('chart_wh'));
-    charts.wh.setOption({
+    charts.wh = safeChart('chart_wh');
+    charts.wh && charts.wh.setOption({
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
         legend: { top: 0 },
         grid: { left: 50, right: 20, top: 40, bottom: 30 },
@@ -227,8 +246,8 @@ async function renderDashboard() {
     });
 
     const catNames = Object.keys(d.by_category);
-    charts.cat = echarts.init(document.getElementById('chart_cat'));
-    charts.cat.setOption({
+    charts.cat = safeChart('chart_cat');
+    charts.cat && charts.cat.setOption({
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
         legend: { top: 0 },
         grid: { left: 50, right: 40, top: 40, bottom: 30 },
@@ -243,8 +262,8 @@ async function renderDashboard() {
         }]
     });
 
-    charts.overview = echarts.init(document.getElementById('chart_overview'));
-    charts.overview.setOption({
+    charts.overview = safeChart('chart_overview');
+    charts.overview && charts.overview.setOption({
         tooltip: { trigger: 'item' },
         legend: { bottom: 0 },
         series: [{
@@ -353,7 +372,7 @@ async function loadOrders() {
 }
 
 async function upgradeOrders() {
-    const r = await api('/orders/any/upgrade', { method: 'POST' });
+    const r = await api('/orders/upgrade-all', { method: 'POST' });
     showToast(r.success ? '已检查并升级超时工单' : '操作失败', r.success ? 'success' : 'error');
     loadOrders();
 }
@@ -659,9 +678,8 @@ async function viewReport(taskNo) {
     `, `<button class="btn btn-default" onclick="closeModal()">关闭</button>`, true);
 
     setTimeout(() => {
-        const el = document.getElementById('rpt_chart');
-        if (el && window.echarts) {
-            const c = echarts.init(el);
+        const c = safeChart('rpt_chart');
+        if (c) {
             c.setOption({
                 tooltip: { trigger: 'item' },
                 legend: { bottom: 0 },
@@ -894,8 +912,8 @@ async function renderMonthly() {
         return;
     }
 
-    charts.m1 = echarts.init(document.getElementById('m_chart1'));
-    charts.m1.setOption({
+    charts.m1 = safeChart('m_chart1');
+    charts.m1 && charts.m1.setOption({
         tooltip: { trigger: 'axis' },
         legend: { top: 0 },
         grid: { left: 50, right: 20, top: 40, bottom: 30 },
@@ -908,8 +926,8 @@ async function renderMonthly() {
         ]
     });
 
-    charts.m2 = echarts.init(document.getElementById('m_chart2'));
-    charts.m2.setOption({
+    charts.m2 = safeChart('m_chart2');
+    charts.m2 && charts.m2.setOption({
         tooltip: { trigger: 'axis' },
         legend: { top: 0 },
         grid: { left: 50, right: 20, top: 40, bottom: 30 },
@@ -921,8 +939,8 @@ async function renderMonthly() {
         ]
     });
 
-    charts.m3 = echarts.init(document.getElementById('m_chart3'));
-    charts.m3.setOption({
+    charts.m3 = safeChart('m_chart3');
+    charts.m3 && charts.m3.setOption({
         tooltip: { trigger: 'axis' },
         grid: { left: 50, right: 20, top: 30, bottom: 30 },
         xAxis: { type: 'category', data: months },
@@ -934,8 +952,8 @@ async function renderMonthly() {
         }]
     });
 
-    charts.m4 = echarts.init(document.getElementById('m_chart4'));
-    charts.m4.setOption({
+    charts.m4 = safeChart('m_chart4');
+    charts.m4 && charts.m4.setOption({
         tooltip: { trigger: 'axis' },
         grid: { left: 50, right: 20, top: 30, bottom: 30 },
         xAxis: { type: 'category', data: months },
