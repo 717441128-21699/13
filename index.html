@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>库存盘点与差异自动化管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logo-icon">📦</div>
+            <div class="logo-text">
+                <div class="title">库存管理系统</div>
+                <div class="subtitle">Inventory Control</div>
+            </div>
+        </div>
+        <nav class="menu">
+            <a class="menu-item active" data-view="dashboard">
+                <span class="icon">📊</span><span>仪表板</span>
+            </a>
+            <a class="menu-item" data-view="orders">
+                <span class="icon">📋</span><span>盘点工单</span>
+            </a>
+            <a class="menu-item" data-view="check">
+                <span class="icon">✅</span><span>手动盘点</span>
+            </a>
+            <a class="menu-item" data-view="reports">
+                <span class="icon">📈</span><span>差异报告</span>
+            </a>
+            <a class="menu-item" data-view="monthly">
+                <span class="icon">📅</span><span>月度分析</span>
+            </a>
+            <a class="menu-item" data-view="logs">
+                <span class="icon">📝</span><span>操作日志</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div class="main">
+        <header class="header">
+            <div class="header-left">
+                <h1 id="pageTitle">仪表板</h1>
+                <span class="breadcrumb" id="pageBreadcrumb">首页 / 仪表板</span>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-primary" onclick="runDailyJob()">
+                    <span>▶</span> 执行每日盘点
+                </button>
+                <div class="user">
+                    <div class="avatar">管</div>
+                    <span>管理员</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="content" id="content">
+            <div class="loading">加载中...</div>
+        </main>
+    </div>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-mask" onclick="closeModal()"></div>
+    <div class="modal-box" id="modalBox">
+        <div class="modal-header">
+            <span id="modalTitle">标题</span>
+            <a class="close" onclick="closeModal()">×</a>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer" id="modalFooter"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

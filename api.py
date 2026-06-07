@@ -12,7 +12,7 @@ from models import (
 )
 from config import REPORT_DIR, EXPORT_DIR
 
-app = Flask(__name__, static_folder='static', static_url_path='')
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
 init_db()

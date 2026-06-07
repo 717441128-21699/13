@@ -14,7 +14,6 @@ class Warehouse(Base):
     name = Column(String(100), nullable=False)
     location = Column(String(200))
     supervisor = Column(String(100))
-    created_at = Column(DateTime, default=datetime.now)
 
 
 class Product(Base):
@@ -25,7 +24,6 @@ class Product(Base):
     category = Column(String(50))
     unit = Column(String(20))
     unit_price = Column(Float, default=0.0)
-    created_at = Column(DateTime, default=datetime.now)
 
 
 class RealtimeInventory(Base):
